@@ -9,7 +9,7 @@
 
 #define DUMMY   0x00   
 #define Read_id 0x9F
-
+#define ERASE_SECTOR 0x20
 
 
 /*等待超时时间*/
@@ -24,7 +24,7 @@ void SPI1_Init(void);
 uint32_t SPI_Read_ID(void);
 uint8_t SPI1_Send_Byte(uint8_t data);
 uint8_t SPI1_Read_Byte(void);
-
+void SPI_Erase_Sector(uint32_t addr);
 
 #endif
 

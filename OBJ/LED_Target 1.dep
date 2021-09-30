@@ -224,7 +224,7 @@ I (..\STM32F10x_FWLib\inc\stm32f10x_tim.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\stm32f10x_usart.h)(0x504F415F)
 I (..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h)(0x4D783BB4)
 I (..\STM32F10x_FWLib\inc\misc.h)(0x4D783BB4)
-F (.\spi.c)(0x61546B99)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\HARDWARE\LED -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I .\FATFS -I .\sdio -I .\usart-ID:\software\keil\Keil\STM32F1xx_DFP\2.1.0\Device\Include-ID:\software\keil\ARM\CMSIS\Include-D__UVISION_VERSION="533" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\spi.o --omf_browse ..\obj\spi.crf --depend ..\obj\spi.d)
+F (.\spi.c)(0x6155C41A)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\HARDWARE\LED -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I .\FATFS -I .\sdio -I .\usart-ID:\software\keil\Keil\STM32F1xx_DFP\2.1.0\Device\Include-ID:\software\keil\ARM\CMSIS\Include-D__UVISION_VERSION="533" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\spi.o --omf_browse ..\obj\spi.crf --depend ..\obj\spi.d)
 I (spi.h)(0x61545050)
 I (stm32f10x.h)(0x4D783CB5)
 I (..\CORE\core_cm3.h)(0x4D523B58)

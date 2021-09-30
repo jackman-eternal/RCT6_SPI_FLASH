@@ -99,8 +99,10 @@ uint8_t SPI1_Read_Byte(void)
 }
 
 /*
-函数：读芯片的ID号
-从机返回3个字节，定义为32位的变量
+uint32_t SPI_Read_ID(void);
+功能：读芯片的ID号
+输入：无
+输出：返回3个字节的ID号
 */
 uint32_t SPI_Read_ID(void)
 {
@@ -123,5 +125,19 @@ static  uint16_t SPI_TIMEOUT_UserCallback(uint8_t errorCode)
   return 0;
 }
 
-
+/*
+void SPI_Erase_Sector(uint32_t addr);
+功能：擦除FLASH的指定扇区
+输入：3个字节的地址
+输出：无
+*/
+void SPI_Erase_Sector(uint32_t addr)
+{
+	FLASH_CS_LOW ; //片选使能
+	
+	SPI1_Send_Byte(ERASE_SECTOR);
+	//发送地址从高位到低位
+	SPI1_Send_Byte(addr<<16);
+	
+}
 

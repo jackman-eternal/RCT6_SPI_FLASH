@@ -3,7 +3,7 @@
 <title>Static Call Graph - [..\OBJ\LED.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image ..\OBJ\LED.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Sep 29 21:35:22 2021
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Thu Sep 30 22:05:24 2021
 <BR><P>
 <H3>Maximum Stack Usage =        100 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -438,13 +438,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI1_Init
 </UL>
 
-<P><STRONG><a name="[5c]"></a>SPI_Read_ID</STRONG> (Thumb, 60 bytes, Stack size 8 bytes, spi.o(i.SPI_Read_ID))
+<P><STRONG><a name="[5c]"></a>SPI_Read_ID</STRONG> (Thumb, 54 bytes, Stack size 8 bytes, spi.o(i.SPI_Read_ID))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = SPI_Read_ID &rArr; SPI1_Send_Byte &rArr; SPI_TIMEOUT_UserCallback &rArr; __2printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ResetBits
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI1_Send_Byte
 <LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_SetBits
-<LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -499,7 +498,6 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_TIMEOUT_UserCallback
-<LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SPI_Read_ID
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 

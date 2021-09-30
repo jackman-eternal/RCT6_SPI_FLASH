@@ -13,14 +13,13 @@
 	uart_init(9600);
 	SPI1_Init();
 	 
-   
-	 
-	while(1)
-	{
     The_Id = SPI_Read_ID(); 
     delay_us(10); 	 
 	printf("Id = %#x \r\n ",The_Id); 
-	
+	 
+	while(1)
+	{
+    
 //		LED0=0;
 //		LED1=1;
 //		delay_ms(300);	 //—” ±300ms

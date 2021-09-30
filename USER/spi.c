@@ -111,7 +111,9 @@ uint32_t SPI_Read_ID(void)
 	Flash_ID |= SPI1_Send_Byte(DUMMY)<<8;
 	Flash_ID |= SPI1_Send_Byte(DUMMY);
 	FLASH_CS_HIGH ; //Í£Ö¹ÐÅºÅ	
+	
 	return Flash_ID  ;
+	
 }
 
 static  uint16_t SPI_TIMEOUT_UserCallback(uint8_t errorCode)

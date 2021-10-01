@@ -127,7 +127,7 @@ static  uint16_t SPI_TIMEOUT_UserCallback(uint8_t errorCode)
 
 /*
 void SPI_Erase_Sector(uint32_t addr);
-功能：擦除FLASH的指定扇区
+功能：擦除FLASH的指定扇区(擦除和写入时需要内部时间的)
 输入：3个字节的地址
 输出：无
 */
@@ -137,7 +137,10 @@ void SPI_Erase_Sector(uint32_t addr)
 	
 	SPI1_Send_Byte(ERASE_SECTOR);
 	//发送地址从高位到低位
-	SPI1_Send_Byte(addr<<16);
+	SPI1_Send_Byte((addr>>16)&0xff);
+	SPI1_Send_Byte((addr>>8)&0xff);
+	SPI1_Send_Byte(addr&0xff);
 	
+	FLASH_CS_HIGH ; //停止信号	
 }
 

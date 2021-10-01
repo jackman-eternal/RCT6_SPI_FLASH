@@ -19,7 +19,7 @@
 	 
 	while(1)
 	{
-    
+        printf("test \r\n"); 
 //		LED0=0;
 //		LED1=1;
 //		delay_ms(300);	 //—” ±300ms

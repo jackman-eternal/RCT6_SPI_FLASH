@@ -143,4 +143,23 @@ void SPI_Erase_Sector(uint32_t addr)
 	
 	FLASH_CS_HIGH ; //停止信号	
 }
+/*
+void SPI_WaitForWriteEnd(void);
+功能:等待擦除或者写入的指令完成,busy为1代表忙碌
+输入：无
+输出：无
+*/
+void SPI_WaitForWriteEnd(void)
+{
+	uint8_t status_res =0;
+	
+	FLASH_CS_LOW ; //片选使能
+	SPI1_Send_Byte(READ_STATUS);	
+	do
+	{
+	 status_res = SPI1_Send_Byte(0x00);
+     //为1 忙碌
+	}while((status_res & 0x01)==1);	
+	FLASH_CS_HIGH ; //停止信号
+}
 

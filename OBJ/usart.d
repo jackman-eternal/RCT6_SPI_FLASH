@@ -29,4 +29,6 @@
 ..\obj\usart.o: ..\STM32F10x_FWLib\inc\stm32f10x_usart.h
 ..\obj\usart.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 ..\obj\usart.o: ..\STM32F10x_FWLib\inc\misc.h
+..\obj\usart.o: delay.h
+..\obj\usart.o: sys.h
 ..\obj\usart.o: D:\software\keil\ARM\ARMCC\Bin\..\include\stdio.h

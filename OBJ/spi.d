@@ -30,6 +30,6 @@
 ..\obj\spi.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 ..\obj\spi.o: ..\STM32F10x_FWLib\inc\misc.h
 ..\obj\spi.o: usart.h
-..\obj\spi.o: D:\software\keil\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\spi.o: delay.h
 ..\obj\spi.o: sys.h
+..\obj\spi.o: D:\software\keil\ARM\ARMCC\Bin\..\include\stdio.h

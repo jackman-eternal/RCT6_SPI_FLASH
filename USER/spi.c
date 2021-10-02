@@ -11,12 +11,6 @@ SPI1 CS   PA2 推挽
 static __IO uint32_t  SPITimeout = SPIT_LONG_TIMEOUT;    
 static uint16_t SPI_TIMEOUT_UserCallback(uint8_t errorCode);//超时检测
 
-/*
-
-功能：
-输入：
-输出：
-*/
 
 /*
 void SPI1_Init(void);
@@ -60,6 +54,7 @@ void SPI1_Init(void)
     SPI_Cmd(SPI1,ENABLE);
 }
 
+
 /*
 uint8_t SPI1_Send_Byte(uint8_t data);
 功能：向从机写一个字节
@@ -86,6 +81,7 @@ uint8_t SPI1_Send_Byte(uint8_t data)
 	return SPI_I2S_ReceiveData(SPI1 ); 
 }
 
+
 /*
 uint8_t SPI1_Read_Byte(void);
 功能：读取主机发来的数据
@@ -97,6 +93,7 @@ uint8_t SPI1_Read_Byte(void)
 	//注：这个函数用得不多
 	return SPI1_Send_Byte(DUMMY); 
 }
+
 
 /*
 uint32_t SPI_Read_ID(void);
@@ -125,6 +122,7 @@ static  uint16_t SPI_TIMEOUT_UserCallback(uint8_t errorCode)
   return 0;
 }
 
+
 /*
 void SPI_Erase_Sector(uint32_t addr);
 功能：擦除FLASH的指定扇区(擦除和写入时需要内部时间的)
@@ -133,6 +131,7 @@ void SPI_Erase_Sector(uint32_t addr);
 */
 void SPI_Erase_Sector(uint32_t addr)
 {
+	SPI_Write_Enable(); 
 	FLASH_CS_LOW ; //片选使能
 	
 	SPI1_Send_Byte(ERASE_SECTOR);
@@ -142,7 +141,10 @@ void SPI_Erase_Sector(uint32_t addr)
 	SPI1_Send_Byte(addr&0xff);
 	
 	FLASH_CS_HIGH ; //停止信号	
+    SPI_WaitForWriteEnd();
 }
+
+
 /*
 void SPI_WaitForWriteEnd(void);
 功能:等待擦除或者写入的指令完成,busy为1代表忙碌
@@ -152,7 +154,6 @@ void SPI_WaitForWriteEnd(void);
 void SPI_WaitForWriteEnd(void)
 {
 	uint8_t status_res =0;
-	
 	FLASH_CS_LOW ; //片选使能
 	SPI1_Send_Byte(READ_STATUS);	
 	do
@@ -163,3 +164,72 @@ void SPI_WaitForWriteEnd(void)
 	FLASH_CS_HIGH ; //停止信号
 }
 
+
+/*
+void SPI_Read_Data(uint32_t addr ,uint8_t* buff,uint32_t numByteToRead) );
+功能:读取FLASH的内容,一次擦书是擦除4096个字节
+输入：要擦除的32位地址  读取数据存放缓存区  要读取的字节数
+输出：无(不止一个值)
+*/
+void SPI_Read_Data(uint32_t addr ,uint8_t* readbuff,uint32_t numByteToRead )
+{
+	SPI_Write_Enable(); 
+	FLASH_CS_LOW ; //片选使能
+    
+    SPI1_Send_Byte(READ_DATA);	
+	
+	SPI1_Send_Byte((addr>>16)&0xff);
+	SPI1_Send_Byte((addr>>8)&0xff);
+	SPI1_Send_Byte(addr&0xff);
+	
+	while(numByteToRead--)
+	{
+		*readbuff = SPI1_Send_Byte(0x00);
+		readbuff ++;
+	}
+	
+	FLASH_CS_HIGH ; //停止信号
+	SPI_WaitForWriteEnd();
+}	
+
+
+/*
+void SPI_Write_Enable(void);
+功能：写使能
+输入：无
+输出：无
+*/
+void SPI_Write_Enable(void)
+{
+	FLASH_CS_LOW ; //片选使能
+	SPI1_Send_Byte(WRITE_ENABLE);
+	FLASH_CS_HIGH ; //停止信号
+}
+
+
+/*
+void SPI_Write_Data(uint32_t addr ,uint8_t* writebuff,uint32_t numByteToRead);
+功能：向FLASH写入内容
+输入：无
+输出：无
+*/
+void SPI_Write_Data(uint32_t addr ,uint8_t* writebuff,uint32_t numByteToWrite)
+{
+	SPI_Write_Enable();
+	FLASH_CS_LOW ; //片选使能
+	SPI1_Send_Byte(WRITE_DATA);
+	
+	SPI1_Send_Byte((addr>>16)&0xff);
+	SPI1_Send_Byte((addr>>8)&0xff);
+	SPI1_Send_Byte(addr&0xff);
+	
+	while(numByteToWrite--)
+	{
+	    SPI1_Send_Byte(*writebuff);
+		writebuff ++;
+	}
+	
+	FLASH_CS_HIGH ; //停止信号
+    SPI_WaitForWriteEnd();//等待写入
+	
+}

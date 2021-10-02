@@ -7,12 +7,14 @@
 
 
 
-#define DUMMY   0x00   
-#define Read_id 0x9F
+#define DUMMY        0x00   
+#define Read_id      0x9F
 #define ERASE_SECTOR 0x20
 #define READ_STATUS  0x05
-
-
+#define READ_DATA    0x03
+#define WRITE_ENABLE 0x06
+#define WRITE_DATA   0x02
+ 
 /*等待超时时间*/
 #define SPIT_FLAG_TIMEOUT         ((uint32_t)0x1000)
 #define SPIT_LONG_TIMEOUT         ((uint32_t)(10 * SPIT_FLAG_TIMEOUT))
@@ -25,8 +27,11 @@ void SPI1_Init(void);
 uint32_t SPI_Read_ID(void);
 uint8_t SPI1_Send_Byte(uint8_t data);
 uint8_t SPI1_Read_Byte(void);
+void SPI_Read_Data(uint32_t addr ,uint8_t* readbuff,uint32_t numByteToRead );
 void SPI_Erase_Sector(uint32_t addr);
 void SPI_WaitForWriteEnd(void);
+void SPI_Write_Enable(void);
+void SPI_Write_Data(uint32_t addr ,uint8_t* writebuff,uint32_t numByteToWrite);
 
 
 #endif

@@ -5,7 +5,7 @@
 #include<stdio.h>
 	  	
 void uart_init(u32 bound);
-
+extern uint8_t temp;
 
 
 #endif

@@ -1,20 +1,22 @@
 #include "usart.h"	  
 
-
+uint8_t temp;
 
 int fputc(int ch, FILE *f)
 {
 	USART_SendData(USART1, (uint8_t) ch);
 
-	while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET) {}	
+	while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET) {}	
    
     return ch;
 }
-int GetKey (void)  { 
 
-    while (!(USART1->SR & USART_FLAG_RXNE));
-
-    return ((int)(USART1->DR & 0x1FF));
+int getc(FILE *f)
+{
+	/* 等待串口输入数据 */
+	while(USART_GetFlagStatus(USART1,USART_FLAG_RXNE)==RESET);
+	/* 返回值进行强制类型转换 */
+	return (int)USART_ReceiveData(USART1);
 }
 
    
@@ -23,7 +25,7 @@ void uart_init(u32 bound){
   //GPIO端口设置
   GPIO_InitTypeDef GPIO_InitStructure;
   USART_InitTypeDef USART_InitStructure;
-  
+  NVIC_InitTypeDef  NVIC_InitStructure;
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1|RCC_APB2Periph_GPIOA, ENABLE);	//使能USART1，GPIOA时钟
   
 	//USART1_TX   GPIOA.9
@@ -37,6 +39,12 @@ void uart_init(u32 bound){
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;//浮空输入
     GPIO_Init(GPIOA, &GPIO_InitStructure);//初始化GPIOA.10  
   
+	NVIC_InitStructure.NVIC_IRQChannel  = USART1_IRQn ;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE ;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 2;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority =2;
+	NVIC_Init(&NVIC_InitStructure);
+	
      //USART 初始化设置
 	USART_InitStructure.USART_BaudRate = bound;//串口波特率
 	USART_InitStructure.USART_WordLength = USART_WordLength_8b;//字长为8位数据格式
@@ -44,7 +52,20 @@ void uart_init(u32 bound){
 	USART_InitStructure.USART_Parity = USART_Parity_No;//无奇偶校验位
 	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//无硬件数据流控制
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;	//收发模式
-
+    
+	USART_ITConfig(USART1 ,USART_IT_RXNE ,ENABLE ); 
     USART_Init(USART1, &USART_InitStructure);     //初始化串口1
     USART_Cmd(USART1, ENABLE);                    //使能串口1 
+}
+
+void USART1_IRQHandler(void )
+{
+	
+	if(USART_GetITStatus(USART1 ,USART_IT_RXNE )==SET  )
+	{
+		temp = USART_ReceiveData(USART1 );
+		
+		USART_SendData(USART1,temp) ;
+        USART_ClearITPendingBit(USART1 ,USART_IT_RXNE ); 		
+	}
 }

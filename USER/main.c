@@ -1,3 +1,8 @@
+/*
+PA1 CHANNEL1  PH 
+PA2 CHANNEL3  O2
+PA3 CHANNEL2  TU
+*/
 #include "led.h"
 #include "delay.h"
 #include "sys.h"
@@ -10,6 +15,7 @@ void conver(void);
 uint8_t  readbuff[4096]; //放在堆栈溢出
 uint8_t  writebuff[4096];
 float  tem,ADC_PH_Temp1,ADC_TU_Temp2,ADC_O2_Temp3,PH,TU,O2;
+float  TU_calibration = 0.0;
 
  int main(void)
  {	
@@ -21,11 +27,12 @@ float  tem,ADC_PH_Temp1,ADC_TU_Temp2,ADC_O2_Temp3,PH,TU,O2;
 	LED_Init();		  	//初始化与LED连接的硬件接口
 //	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2 ); 
 	uart_init(9600);
-	check = DS18B20_Init();
-	if(check == 0)
-	{
-		printf("ok \r\n "); 
-	}
+	ADC1_Multi_Init();
+//	check = DS18B20_Init();
+//	if(check == 0)
+//	{
+//		printf("ok \r\n "); 
+//	}
 	/* 
 	SPI1_Init();
 	 
@@ -54,11 +61,13 @@ float  tem,ADC_PH_Temp1,ADC_TU_Temp2,ADC_O2_Temp3,PH,TU,O2;
 	{
 	 conver();	
      tem = DS18B20_Get_Temp();
-     delay_ms(1000); 		
+     delay_ms(1000);  
+     delay_ms(2000); 		
 //	 printf("tem =  %.2f \r\n ",tem/10);
-printf("{\"zhuo\":%.2f,\"temperature\":%.2f,\"NH3\":%.2f,\"O2\":%.2f,\"pH\":%.2f}"
-		,TU,tem,O2,PH);		//ADC_Value_Temp1
-
+printf("{\"zhuo\":%.2f,\"temperature\":%.2f,\"O2\":%.2f,\"pH\":%.2f}"
+		,TU,tem/10,O2,PH);		
+//printf("ADC_TU_Temp2 = %f \r\n ,ADC_TU_Temp2 = %f\r\n ,ADC_O2_Temp3 = %f\r\n",
+//		ADC_TU_Temp2,ADC_TU_Temp2,ADC_O2_Temp3) ;
 		
     
 	}
@@ -79,6 +88,7 @@ void conver(void)
       {
 	      PH=14.0;
 	  }
+	   TU_calibration=-0.0192*(tem/10-25)+ADC_TU_Temp2;
 	   TU=-865.68*ADC_TU_Temp2+3291.3;
 	  if(TU<=0)
       {

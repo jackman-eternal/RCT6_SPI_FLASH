@@ -40,5 +40,7 @@ void conver(void)
 	  }
 	  
 }
+printf("{\"zhuo\":%.2f,\"temperature\":%.2f,\"NH3\":%.2f,\"O2\":%.2f,\"pH\":%.2f}"
+		,TU,tem/10,O2,PH);	
 */
 

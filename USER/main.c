@@ -4,15 +4,19 @@
 #include "usart.h"
 #include "spi.h"
 #include "ds18b20.h"
+#include "adc.h"
 
+void conver(void);
 uint8_t  readbuff[4096]; //放在堆栈溢出
 uint8_t  writebuff[4096];
+float  tem,ADC_PH_Temp1,ADC_TU_Temp2,ADC_O2_Temp3,PH,TU,O2;
+
  int main(void)
  {	
 
-	uint32_t  The_Id;
+//	uint32_t  The_Id;
 	uint8_t check = 1; 
-	float  tem;
+	
 	delay_init();	    	 //延时函数初始化	  
 	LED_Init();		  	//初始化与LED连接的硬件接口
 //	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2 ); 
@@ -48,18 +52,48 @@ uint8_t  writebuff[4096];
 	 
 	while(1)
 	{
-		
+	 conver();	
      tem = DS18B20_Get_Temp();
      delay_ms(1000); 		
-	 printf("tem =  %.2f \r\n ",tem/10);
+//	 printf("tem =  %.2f \r\n ",tem/10);
+printf("{\"zhuo\":%.2f,\"temperature\":%.2f,\"NH3\":%.2f,\"O2\":%.2f,\"pH\":%.2f}"
+		,TU,tem,O2,PH);		//ADC_Value_Temp1
+
 		
+    
+	}
+  
+ }
+
+void conver(void)
+{    
+	 ADC_PH_Temp1 = (float)ADC_Value[0]*3.3/4096;
+	 ADC_TU_Temp2 = (float)ADC_Value[1]*3.3/4096;
+	 ADC_O2_Temp3 = (float)ADC_Value[2]*3.3/4096;
+	 PH = -5.7541*ADC_PH_Temp1+16.654;
+	if(PH<=0.0)
+      {
+		  PH=0.0;
+	  }
+	if(PH>=14.0)
+      {
+	      PH=14.0;
+	  }
+	   TU=-865.68*ADC_TU_Temp2+3291.3;
+	  if(TU<=0)
+      {
+	      TU=0;
+	  }
+	  if(TU>=3000)
+      {
+		  TU=3000;
+	  }
+	  O2 = ADC_O2_Temp3;
+}
 //		LED0=0;
 //		LED1=1;
 //		delay_ms(300);	 //延时300ms
 //		LED0=1;
 //		LED1=0;
-//	    delay_ms(500);	//延时300ms      
-	}
-  
- }
+//	    delay_ms(500);	//延时300ms  
 

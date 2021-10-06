@@ -3,6 +3,7 @@
 #include "sys.h"
 #include "usart.h"
 #include "spi.h"
+#include "ds18b20.h"
 
 uint8_t  readbuff[4096]; //放在堆栈溢出
 uint8_t  writebuff[4096];
@@ -10,12 +11,18 @@ uint8_t  writebuff[4096];
  {	
 
 	uint32_t  The_Id;
-	uint16_t i=0;
-	
+	uint8_t check = 1; 
+	float  tem;
 	delay_init();	    	 //延时函数初始化	  
 	LED_Init();		  	//初始化与LED连接的硬件接口
 //	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2 ); 
 	uart_init(9600);
+	check = DS18B20_Init();
+	if(check == 0)
+	{
+		printf("ok \r\n "); 
+	}
+	/* 
 	SPI1_Init();
 	 
     The_Id = SPI_Read_ID(); 
@@ -37,9 +44,14 @@ uint8_t  writebuff[4096];
 		 printf("\n"); 
 	 }
 	 
+	 */
 	 
 	while(1)
 	{
+		
+     tem = DS18B20_Get_Temp();
+     delay_ms(1000); 		
+	 printf("tem =  %.2f \r\n ",tem/10);
 		
 //		LED0=0;
 //		LED1=1;

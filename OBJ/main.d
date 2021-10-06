@@ -34,3 +34,4 @@
 ..\obj\main.o: usart.h
 ..\obj\main.o: D:\software\keil\ARM\ARMCC\Bin\..\include\stdio.h
 ..\obj\main.o: spi.h
+..\obj\main.o: ds18b20.h

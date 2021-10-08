@@ -84,7 +84,7 @@ void ADC1_Multi_Init(void)  //开启PA1和PA3
 	ADC1_Config.ADC_NbrOfChannel =3;
 	ADC_Init(ADC1,&ADC1_Config);
 	
-	RCC_ADCCLKConfig(RCC_PCLK2_Div8);
+	RCC_ADCCLKConfig(RCC_PCLK2_Div6);
 	//每一个通道都要设置采样顺序和时间
     ADC_RegularChannelConfig(ADC1,ADC_Channel_1 ,1,ADC_SampleTime_55Cycles5);
 	ADC_RegularChannelConfig(ADC1,ADC_Channel_2 ,3,ADC_SampleTime_55Cycles5);

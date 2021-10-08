@@ -5,6 +5,12 @@
 #include "usart.h"
 #include "delay.h"
 
+#define TimeConstant 1                  //滤波器时间常数
+#define Ts           0.0001             //运算周期
+//#define Factor  (1/((TimeConstant/Ts)+1)) //滤波系数
+#define Factor       0.45
+
+
 //extern   __IO uint32_t ADC_ConValue;
 //extern   __IO uint16_t ADC_Value;  //转换的电压值通过DMA传到SRAM
 extern   __IO uint16_t ADC_Value[3]; //多通道模式，在sram中定义两个变量

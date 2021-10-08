@@ -12,15 +12,12 @@ PA3 CHANNEL2  TU
 #include "adc.h"
 
 void conver(void);
+float Get_Average();
 uint8_t  readbuff[4096]; //放在堆栈溢出
 uint8_t  writebuff[4096];
 float  tem,ADC_PH_Temp1,ADC_TU_Temp2,ADC_O2_Temp3,PH,TU,O2;
 float  TU_calibration = 0.0;
-float  ADC_O2_Temp3_last = 0.0,ADC_O2_Temp3_Now = 0.0;
-//float  Y_Value,X_Value; //Y一阶滤波上次输出值,X为本次输出
 
-float FirstOrderFilter(float X_Value,float Y_Value);
-float Get_O2_ADValue();
  int main(void)
  {	
 
@@ -63,22 +60,16 @@ float Get_O2_ADValue();
 	 
 	while(1)
 	{
-//	 conver();	
+	 conver();	
 //   tem = DS18B20_Get_Temp();
-     delay_ms(1000);  
- 	 ADC_O2_Temp3_last = Get_O2_ADValue();
-	 delay_us(10);
-     ADC_O2_Temp3_Now  = Get_O2_ADValue();
-     O2 =  FirstOrderFilter(ADC_O2_Temp3_Now,ADC_O2_Temp3_last) ;		
-//     printf("tem =  %.2f \r\n ",tem/10);
+     delay_ms(1000);  	
+//    printf("tem =  %.2f \r\n ",tem/10);
 //    printf("{\"zhuo\":%.2f,\"temperature\":%.2f,\"O2\":%.2f,\"pH\":%.2f}"
 //		,TU,tem/10,O2,PH);		
 //printf("ADC_TU_Temp2 = %f \r\n ,ADC_TU_Temp2 = %f\r\n ,ADC_O2_Temp3 = %f\r\n",
 //		ADC_TU_Temp2,ADC_TU_Temp2,ADC_O2_Temp3) ;
-	if(ADC_O2_Temp3_last!=ADC_O2_Temp3_Now)
-		{
-	       printf("ADC_O2_Temp3 = %f \r\n",O2); 
-	    }
+	  printf("ADC_O2 = %f \r\n",O2); 
+	    
     
 	}
   
@@ -89,7 +80,7 @@ void conver(void)
 	 ADC_PH_Temp1 = (float)ADC_Value[0]*3.3/4096;
 	 ADC_TU_Temp2 = (float)ADC_Value[1]*3.3/4096;
 //	 ADC_O2_Temp3 = (float)ADC_Value[2]*3.3/4096;
-	
+     O2 = Get_Average();
 	 PH = -5.7541*ADC_PH_Temp1+16.654;
 	if(PH<=0.0)
       {
@@ -112,9 +103,16 @@ void conver(void)
 //	  O2 = ADC_O2_Temp3;
 }
 
-float FirstOrderFilter(float X_Value,float Y_Value)
+float  Get_Average()
 {
-	float NewValue;
-	NewValue = Factor*X_Value +(1-Factor )*Y_Value ;
-    return NewValue;	
+	u8 i;
+	float sum_O2 =0.0;
+	for(i=0;i<10;i++)
+	{
+		ADC_O2_Temp3 =(float)ADC_Value[2]*3.3/4096;
+		delay_us(20); 
+		sum_O2 = ADC_O2_Temp3 + sum_O2;
+	}
+	return 	sum_O2 = sum_O2/10.0;
 }
+

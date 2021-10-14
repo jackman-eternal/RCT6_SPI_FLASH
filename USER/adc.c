@@ -87,8 +87,8 @@ void ADC1_Multi_Init(void)  //开启PA1和PA3
 	RCC_ADCCLKConfig(RCC_PCLK2_Div8);
 	//每一个通道都要设置采样顺序和时间
     ADC_RegularChannelConfig(ADC1,ADC_Channel_1 ,1,ADC_SampleTime_55Cycles5);
-	ADC_RegularChannelConfig(ADC1,ADC_Channel_2 ,3,ADC_SampleTime_55Cycles5);
-	ADC_RegularChannelConfig(ADC1,ADC_Channel_3 ,2,ADC_SampleTime_55Cycles5);
+	ADC_RegularChannelConfig(ADC1,ADC_Channel_2 ,2,ADC_SampleTime_55Cycles5);
+	ADC_RegularChannelConfig(ADC1,ADC_Channel_3 ,3,ADC_SampleTime_55Cycles5);
     ADC_DMACmd(ADC1 ,ENABLE );    //ADC提交DMA请求
     ADC_Cmd(ADC1 ,ENABLE );  
      

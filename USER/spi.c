@@ -233,3 +233,25 @@ void SPI_Write_Data(uint32_t addr ,uint8_t* writebuff,uint32_t numByteToWrite)
     SPI_WaitForWriteEnd();//µÈ´ýÐ´Èë
 	
 }
+
+	/* 
+	SPI1_Init();
+    The_Id = SPI_Read_ID(); 
+    delay_us(10); 	 
+//printf("Id = %#x \r\n ",The_Id); 
+    SPI_Erase_Sector(0);
+    
+	  for(i=0;i<4096;i++)
+	 {
+		writebuff[i] = i ; 
+	 }
+	SPI_Write_Data(0,writebuff,4096); 
+    SPI_Read_Data(0,readbuff,4096);
+	 for(i=0;i<4096;i++)
+	 {
+		 printf("%#x ",readbuff[i]); 
+		 if(i%10 == 0)
+		 printf("\n"); 
+	 }
+	 */
+	

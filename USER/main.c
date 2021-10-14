@@ -1,7 +1,7 @@
 /*
 PA1 CHANNEL1  PH 
-PA2 CHANNEL3  O2
-PA3 CHANNEL2  TU
+PA2 CHANNEL2  O2
+PA3 CHANNEL3  TU
 */
 #include "led.h"
 #include "delay.h"
@@ -10,77 +10,83 @@ PA3 CHANNEL2  TU
 #include "spi.h"
 #include "ds18b20.h"
 #include "adc.h"
+//#include "timer.h"
+//void conver(void);
+//float Get_Average();
 
-void conver(void);
-float Get_Average();
-uint8_t  readbuff[4096]; //放在堆栈溢出
-uint8_t  writebuff[4096];
-float  tem,ADC_PH_Temp1,ADC_TU_Temp2,ADC_O2_Temp3,PH,TU,O2;
+typedef struct 
+{
+	float Value_PH;
+	float Value_TUS;
+	float Value_O2;
+	float Value_Tem;
+}Device;
+float tem;
+float Get_Value_O2(float tem,float Value_O);
+//uint8_t  readbuff[4096]; //放在堆栈溢出
+//uint8_t  writebuff[4096];
 float  TU_calibration = 0.0;
-
+void Calc(void);
+Device Data;
  int main(void)
  {	
-
-//	uint32_t  The_Id;
-	uint8_t check = 1; 
 	
 	delay_init();	    	 //延时函数初始化	  
 	LED_Init();		  	//初始化与LED连接的硬件接口
-//	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2 ); 
+	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2 ); 
 	uart_init(9600);
 	ADC1_Multi_Init();
     DS18B20_Init();
-//	if(check == 0)
-//	{
-//		printf("ok \r\n "); 
-//	}
-	/* 
-	SPI1_Init();
-	 
-    The_Id = SPI_Read_ID(); 
-    delay_us(10); 	 
-//printf("Id = %#x \r\n ",The_Id); 
-    SPI_Erase_Sector(0);
-    
-	  for(i=0;i<4096;i++)
-	 {
-		writebuff[i] = i ; 
-	 }
-	SPI_Write_Data(0,writebuff,4096); 
-	 
-    SPI_Read_Data(0,readbuff,4096);
-	 for(i=0;i<4096;i++)
-	 {
-		 printf("%#x ",readbuff[i]); 
-		 if(i%10 == 0)
-		 printf("\n"); 
-	 }
-	 
-	 */
-	 
+	
 	while(1)
 	{
-	 conver();	
-//   tem = DS18B20_Get_Temp();
-     delay_ms(1000);  	
-//    printf("tem =  %.2f \r\n ",tem/10);
-//    printf("{\"zhuo\":%.2f,\"temperature\":%.2f,\"O2\":%.2f,\"pH\":%.2f}"
-//		,TU,tem/10,O2,PH);		
-//printf("ADC_TU_Temp2 = %f \r\n ,ADC_TU_Temp2 = %f\r\n ,ADC_O2_Temp3 = %f\r\n",
-//		ADC_TU_Temp2,ADC_TU_Temp2,ADC_O2_Temp3) ;
-	  printf("ADC_O2 = %f \r\n",O2); 
-	    
+		 
     
+     delay_ms(1000);  	
+//     printf("{\"zhuo\":%.2f,\"temperature\":%.2f,\"O2\":%.2f,\"pH\":%.2f}"
+//		,Data.Value_TUS,Data.Value_Tem/10,Data.Value_O2,Data.Value_PH);		
+	    
 	}
   
  }
 
+ void Calc(void)
+ {
+	Data.Value_PH = (float)ADC_Value[0]*3.3/4096; 
+	Data.Value_O2 = (float)ADC_Value[1]*3.3/4096;
+	Data.Value_TUS = (float)ADC_Value[2]*3.3/4096;
+	
+	Data.Value_Tem  = DS18B20_Get_Temp(); 
+	delay_ms(100); 
+	Data.Value_PH = -5.7541*Data.Value_PH+16.654;
+	 if(Data.Value_PH<=0.0)
+      {
+		  Data.Value_PH=0.0;
+	  }
+	if(Data.Value_PH>=14.0)
+      {
+	      Data.Value_PH=14.0;
+	  }
+	 Data.Value_TUS=-865.68*Data.Value_TUS+3291.3;
+	  if( Data.Value_TUS<=0)
+      {
+	       Data.Value_TUS=0;
+	  }
+	  if( Data.Value_TUS>=3000)
+      {
+		   Data.Value_TUS=3000;
+	  }
+	  Data.Value_O2 = 0.2589*Data.Value_O2+0.7868;
+	  Data.Value_O2 = Get_Value_O2(Data.Value_Tem,Data.Value_O2);
+ }
+ /*
 void conver(void)
 {    
 	 ADC_PH_Temp1 = (float)ADC_Value[0]*3.3/4096;
 	 ADC_TU_Temp2 = (float)ADC_Value[1]*3.3/4096;
-//	 ADC_O2_Temp3 = (float)ADC_Value[2]*3.3/4096;
+	 ADC_O2_Temp3 = (float)ADC_Value[2]*3.3/4096;
      O2 = Get_Average();
+	 O2 = 0.2589*O2+0.7868;
 	 PH = -5.7541*ADC_PH_Temp1+16.654;
 	if(PH<=0.0)
       {
@@ -100,19 +106,46 @@ void conver(void)
       {
 		  TU=3000;
 	  }
-//	  O2 = ADC_O2_Temp3;
 }
+*/
+//float Get_Average()
+//{
+//	u8 i;
+//	float sum_O2 =0.0;
+//	for(i=0;i<10;i++)
+//	{
+//		ADC_O2_Temp3 =(float)ADC_Value[2]*3.3/4096;
+//		delay_us(20); 
+//		sum_O2 = ADC_O2_Temp3 + sum_O2;
+//	}
+//	return 	sum_O2 = sum_O2/10.0;
+//}
 
-float  Get_Average()
+
+float Get_Value_O2(float tem,float Value_O)
 {
-	u8 i;
-	float sum_O2 =0.0;
-	for(i=0;i<10;i++)
+	if(tem>=15&&tem<=35)
 	{
-		ADC_O2_Temp3 =(float)ADC_Value[2]*3.3/4096;
-		delay_us(20); 
-		sum_O2 = ADC_O2_Temp3 + sum_O2;
+		if(tem<20)
+		{
+			Value_O = 9.1-0.20*(tem-20.0);
+		}
+		else if(tem>=20&&tem<25)
+		{
+			Value_O = 8.3 - 0.16*(tem-25.0);
+		}
+		else if(tem>25&&tem<30)
+		{
+			Value_O = 8.3 - 0.14*(tem-25.0);
+		}
+		else 
+		{
+			Value_O = 7.6 - 0.12*(tem-30.0);
+		}
+		return Value_O;
 	}
-	return 	sum_O2 = sum_O2/10.0;
+	else 
+	{
+		return 0.0;
+	}
 }
-

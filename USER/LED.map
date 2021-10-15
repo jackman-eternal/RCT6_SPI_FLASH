@@ -14,6 +14,7 @@ Section Cross References
     main.o(i.Calc) refers to dadd.o(.text) for __aeabi_dadd
     main.o(i.Calc) refers to cdcmple.o(.text) for __aeabi_cdcmple
     main.o(i.Calc) refers to cdrcmple.o(.text) for __aeabi_cdrcmple
+    main.o(i.Calc) refers to fdiv.o(.text) for __aeabi_fdiv
     main.o(i.Calc) refers to cfcmple.o(.text) for __aeabi_cfcmple
     main.o(i.Calc) refers to cfrcmple.o(.text) for __aeabi_cfrcmple
     main.o(i.Calc) refers to main.o(i.Get_Value_O2) for Get_Value_O2
@@ -447,6 +448,8 @@ Section Cross References
     printfa.o(i._printf_pre_padding) refers (Special) to iusefp.o(.text) for __I$use$fp
     printfa.o(i._snputc) refers (Special) to iusefp.o(.text) for __I$use$fp
     printfa.o(i._sputc) refers (Special) to iusefp.o(.text) for __I$use$fp
+    fdiv.o(.text) refers (Special) to iusefp.o(.text) for __I$use$fp
+    fdiv.o(.text) refers to fepilogue.o(.text) for _float_round
     dadd.o(.text) refers (Special) to iusefp.o(.text) for __I$use$fp
     dadd.o(.text) refers to llshl.o(.text) for __aeabi_llsl
     dadd.o(.text) refers to llsshr.o(.text) for __aeabi_lasr
@@ -486,9 +489,9 @@ Section Cross References
 
 Removing Unused input sections from the image.
 
-    Removing main.o(i.Calc), (448 bytes).
+    Removing main.o(i.Calc), (696 bytes).
     Removing main.o(i.Get_Value_O2), (364 bytes).
-    Removing main.o(.bss), (16 bytes).
+    Removing main.o(.bss), (20 bytes).
     Removing main.o(.data), (8 bytes).
     Removing system_stm32f10x.o(i.SystemCoreClockUpdate), (164 bytes).
     Removing sys.o(.emb_text), (6 bytes).
@@ -767,6 +770,7 @@ Removing Unused input sections from the image.
     Removing stm32f10x_adc.o(i.ADC_SoftwareStartInjectedConvCmd), (22 bytes).
     Removing stm32f10x_adc.o(i.ADC_StructInit), (18 bytes).
     Removing stm32f10x_adc.o(i.ADC_TempSensorVrefintCmd), (36 bytes).
+    Removing fdiv.o(.text), (124 bytes).
     Removing dadd.o(.text), (334 bytes).
     Removing dmul.o(.text), (228 bytes).
     Removing ddiv.o(.text), (222 bytes).
@@ -782,7 +786,7 @@ Removing Unused input sections from the image.
     Removing depilogue.o(.text), (186 bytes).
     Removing dfixul.o(.text), (48 bytes).
 
-295 unused section(s) (total 13868 bytes) removed from the image.
+296 unused section(s) (total 14244 bytes) removed from the image.
 
 ==============================================================================
 
@@ -813,22 +817,23 @@ Image Symbol Table
     ../clib/microlib/longlong.c              0x00000000   Number         0  llushr.o ABSOLUTE
     ../clib/microlib/longlong.c              0x00000000   Number         0  llsshr.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf5.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf0.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printfb.o ABSOLUTE
-    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf1.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printfa.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf0.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf2.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf3.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf4.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf6.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf7.o ABSOLUTE
     ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf8.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printf1.o ABSOLUTE
+    ../clib/microlib/printf/printf.c         0x00000000   Number         0  printfb.o ABSOLUTE
     ../clib/microlib/printf/stubs.s          0x00000000   Number         0  stubs.o ABSOLUTE
     ../clib/microlib/stdio/streams.c         0x00000000   Number         0  stdout.o ABSOLUTE
     ../clib/microlib/stubs.s                 0x00000000   Number         0  iusefp.o ABSOLUTE
     ../fplib/microlib/d2f.c                  0x00000000   Number         0  d2f.o ABSOLUTE
     ../fplib/microlib/f2d.c                  0x00000000   Number         0  f2d.o ABSOLUTE
     ../fplib/microlib/fpadd.c                0x00000000   Number         0  dadd.o ABSOLUTE
+    ../fplib/microlib/fpdiv.c                0x00000000   Number         0  fdiv.o ABSOLUTE
     ../fplib/microlib/fpdiv.c                0x00000000   Number         0  ddiv.o ABSOLUTE
     ../fplib/microlib/fpepilogue.c           0x00000000   Number         0  depilogue.o ABSOLUTE
     ../fplib/microlib/fpepilogue.c           0x00000000   Number         0  fepilogue.o ABSOLUTE
@@ -1158,17 +1163,17 @@ Memory Map of the image
 
     0x08000000   0x08000000   0x00000130   Data   RO          693    RESET               startup_stm32f10x_hd.o
     0x08000130   0x08000130   0x00000000   Code   RO         2468  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
-    0x08000130   0x08000130   0x00000004   Code   RO         2754    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
-    0x08000134   0x08000134   0x00000004   Code   RO         2757    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
-    0x08000138   0x08000138   0x00000000   Code   RO         2759    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
-    0x08000138   0x08000138   0x00000000   Code   RO         2761    .ARM.Collect$$$$0000000A  mc_w.l(entry8b.o)
-    0x08000138   0x08000138   0x00000008   Code   RO         2762    .ARM.Collect$$$$0000000B  mc_w.l(entry9a.o)
-    0x08000140   0x08000140   0x00000004   Code   RO         2769    .ARM.Collect$$$$0000000E  mc_w.l(entry12b.o)
-    0x08000144   0x08000144   0x00000000   Code   RO         2764    .ARM.Collect$$$$0000000F  mc_w.l(entry10a.o)
-    0x08000144   0x08000144   0x00000000   Code   RO         2766    .ARM.Collect$$$$00000011  mc_w.l(entry11a.o)
-    0x08000144   0x08000144   0x00000004   Code   RO         2755    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
+    0x08000130   0x08000130   0x00000004   Code   RO         2756    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
+    0x08000134   0x08000134   0x00000004   Code   RO         2759    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
+    0x08000138   0x08000138   0x00000000   Code   RO         2761    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
+    0x08000138   0x08000138   0x00000000   Code   RO         2763    .ARM.Collect$$$$0000000A  mc_w.l(entry8b.o)
+    0x08000138   0x08000138   0x00000008   Code   RO         2764    .ARM.Collect$$$$0000000B  mc_w.l(entry9a.o)
+    0x08000140   0x08000140   0x00000004   Code   RO         2771    .ARM.Collect$$$$0000000E  mc_w.l(entry12b.o)
+    0x08000144   0x08000144   0x00000000   Code   RO         2766    .ARM.Collect$$$$0000000F  mc_w.l(entry10a.o)
+    0x08000144   0x08000144   0x00000000   Code   RO         2768    .ARM.Collect$$$$00000011  mc_w.l(entry11a.o)
+    0x08000144   0x08000144   0x00000004   Code   RO         2757    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
     0x08000148   0x08000148   0x00000024   Code   RO          694    .text               startup_stm32f10x_hd.o
-    0x0800016c   0x0800016c   0x00000024   Code   RO         2786    .text               mc_w.l(init.o)
+    0x0800016c   0x0800016c   0x00000024   Code   RO         2788    .text               mc_w.l(init.o)
     0x08000190   0x08000190   0x00000120   Code   RO          663    i.ADC1_Multi_Init   adc.o
     0x080002b0   0x080002b0   0x00000016   Code   RO         2252    i.ADC_Cmd           stm32f10x_adc.o
     0x080002c6   0x080002c6   0x00000016   Code   RO         2253    i.ADC_DMACmd        stm32f10x_adc.o
@@ -1226,15 +1231,15 @@ Memory Map of the image
     0x08000b64   0x08000b64   0x000000d8   Code   RO         1049    i.USART_Init        stm32f10x_usart.o
     0x08000c3c   0x08000c3c   0x0000000a   Code   RO         1056    i.USART_ReceiveData  stm32f10x_usart.o
     0x08000c46   0x08000c46   0x00000004   Code   RO          151    i.UsageFault_Handler  stm32f10x_it.o
-    0x08000c4a   0x08000c4a   0x0000000e   Code   RO         2792    i.__scatterload_copy  mc_w.l(handlers.o)
-    0x08000c58   0x08000c58   0x00000002   Code   RO         2793    i.__scatterload_null  mc_w.l(handlers.o)
-    0x08000c5a   0x08000c5a   0x0000000e   Code   RO         2794    i.__scatterload_zeroinit  mc_w.l(handlers.o)
+    0x08000c4a   0x08000c4a   0x0000000e   Code   RO         2794    i.__scatterload_copy  mc_w.l(handlers.o)
+    0x08000c58   0x08000c58   0x00000002   Code   RO         2795    i.__scatterload_null  mc_w.l(handlers.o)
+    0x08000c5a   0x08000c5a   0x0000000e   Code   RO         2796    i.__scatterload_zeroinit  mc_w.l(handlers.o)
     0x08000c68   0x08000c68   0x00000044   Code   RO          406    i.delay_init        delay.o
     0x08000cac   0x08000cac   0x0000004c   Code   RO          407    i.delay_ms          delay.o
     0x08000cf8   0x08000cf8   0x0000004c   Code   RO          408    i.delay_us          delay.o
     0x08000d44   0x08000d44   0x0000002c   Code   RO            3    i.main              main.o
     0x08000d70   0x08000d70   0x000000ac   Code   RO          373    i.uart_init         usart.o
-    0x08000e1c   0x08000e1c   0x00000020   Data   RO         2790    Region$$Table       anon$$obj.o
+    0x08000e1c   0x08000e1c   0x00000020   Data   RO         2792    Region$$Table       anon$$obj.o
 
 
     Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x08000e3c, Size: 0x00000438, Max: 0x0000c000, ABSOLUTE)

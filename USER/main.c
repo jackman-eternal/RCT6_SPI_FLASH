@@ -20,6 +20,7 @@ typedef struct
 	float Value_TUS;
 	float Value_O2;
 	float Value_Tem;
+	float Value_compensation;
 }Device;
 float tem;
 float Get_Value_O2(float tem,float Value_O);
@@ -41,7 +42,8 @@ Device Data;
 	while(1)
 	{
 		 
-    
+//    TU_calibration = (float)ADC_Value[0]*3.3/4096;
+//	printf("OUT  = %f \r\n",TU_calibration); 
      delay_ms(1000);  	
 //     printf("{\"zhuo\":%.2f,\"temperature\":%.2f,\"O2\":%.2f,\"pH\":%.2f}"
 //		,Data.Value_TUS,Data.Value_Tem/10,Data.Value_O2,Data.Value_PH);		
@@ -55,7 +57,7 @@ Device Data;
 	Data.Value_PH = (float)ADC_Value[0]*3.3/4096; 
 	Data.Value_O2 = (float)ADC_Value[1]*3.3/4096;
 	Data.Value_TUS = (float)ADC_Value[2]*3.3/4096;
-	
+	Data.Value_compensation = 1.0;
 	Data.Value_Tem  = DS18B20_Get_Temp(); 
 	delay_ms(100); 
 	Data.Value_PH = -5.7541*Data.Value_PH+16.654;
@@ -67,15 +69,28 @@ Device Data;
       {
 	      Data.Value_PH=14.0;
 	  }
-	 Data.Value_TUS=-865.68*Data.Value_TUS+3291.3;
-	  if( Data.Value_TUS<=0)
-      {
-	       Data.Value_TUS=0;
-	  }
-	  if( Data.Value_TUS>=3000)
-      {
-		   Data.Value_TUS=3000;
-	  }
+	 Data.Value_compensation=1.0+0.02*((Data.Value_Tem/10)-25.0); 
+	 Data.Value_TUS=Data.Value_TUS/Data.Value_compensation;
+	 Data.Value_TUS=(133.42* Data.Value_TUS* Data.Value_TUS* Data.Value_TUS - 
+	255.86*Data.Value_TUS*Data.Value_TUS + 857.39*Data.Value_TUS)*0.5;
+	  
+	 if(( Data.Value_TUS<=0))
+        {
+     		Data.Value_TUS=0;
+		}
+	 if(( Data.Value_TUS>1400))
+        { 
+		    Data.Value_TUS=1400;
+		}
+//	 Data.Value_TUS=-865.68*Data.Value_TUS+3291.3;
+//	  if( Data.Value_TUS<=0)
+//      {
+//	       Data.Value_TUS=0;
+//	  }
+//	  if( Data.Value_TUS>=3000)
+//      {
+//		   Data.Value_TUS=3000;
+//	  }
 	  Data.Value_O2 = 0.2589*Data.Value_O2+0.7868;
 	  Data.Value_O2 = Get_Value_O2(Data.Value_Tem,Data.Value_O2);
  }

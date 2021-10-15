@@ -1,6 +1,6 @@
 Dependencies for Project 'LED', Target 'Target 1': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
-F (.\main.c)(0x6167CE96)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\HARDWARE\LED -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I .\FATFS -I .\sdio -I .\usart-ID:\software\keil\Keil\STM32F1xx_DFP\2.1.0\Device\Include-ID:\software\keil\ARM\CMSIS\Include-D__UVISION_VERSION="533" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
+F (.\main.c)(0x6168C77D)(--c99 -c --cpu Cortex-M3 -D__MICROLIB -g -O0 --apcs=interwork --split_sections -I ..\HARDWARE\LED -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\USER -I ..\STM32F10x_FWLib\inc -I ..\CORE -I .\FATFS -I .\sdio -I .\usart-ID:\software\keil\Keil\STM32F1xx_DFP\2.1.0\Device\Include-ID:\software\keil\ARM\CMSIS\Include-D__UVISION_VERSION="533" -DSTM32F10X_HD -DSTM32F10X_HD -DUSE_STDPERIPH_DRIVER-o ..\obj\main.o --omf_browse ..\obj\main.crf --depend ..\obj\main.d)
 I (led.h)(0x532ACAF5)
 I (sys.h)(0x550F951A)
 I (stm32f10x.h)(0x4D783CB5)
